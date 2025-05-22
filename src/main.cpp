@@ -53,20 +53,21 @@ int main()
         readInputWithTab(input);
 
         vector<string> command_vector = parse_command_to_string_vector(input);
+        int size = command_vector.size();
 
         // Empty command
-        if (command_vector.size() == 0)
+        if (size == 0)
             continue;
 
         string output, redirectFile;
         int flag = 0, k = 0;
 
         // File Redirection
-        for (int i = 1; i < command_vector.size(); i++)
+        for (int i = 1; i < size; i++)
         {
             if (command_vector[i] == ">" || command_vector[i] == "1>")
             {
-                if (i + 1 < command_vector.size())
+                if (i + 1 < size)
                 {
                     flag = 1;
                     redirectFile = command_vector[i + 1];
@@ -107,7 +108,7 @@ int main()
         {
             char ch = input.front();
             string command_with_full_path = ch + command_vector[0] + ch;
-            for (int argument_number = 1; argument_number < command_vector.size(); argument_number++)
+            for (int argument_number = 1; argument_number < size; argument_number++)
             {
                 command_with_full_path += " ";
                 command_with_full_path += command_vector[argument_number];
@@ -128,7 +129,7 @@ int main()
             }
             else if (command_vector[0] == "echo")
             {
-                for (int i = 1; i < command_vector.size() - k; i++)
+                for (int i = 1; i < size - k; i++)
                 {
                     if (i != 1)
                         output += " ";
@@ -169,7 +170,7 @@ int main()
             }
             else if (command_vector[0] == "type")
             {
-                if (command_vector.size() < 2)
+                if (size < 2)
                     continue;
                 string command_name = command_vector[1];
                 FullCommand command_type = command_to_full_command_type(command_name);
@@ -196,7 +197,7 @@ int main()
             }
             else if (command_vector[0] == "cd")
             {
-                if (command_vector.size() != 2)
+                if (size != 2)
                     cout << "Syntax of command CD is incorrect";
                 else
                 {
@@ -234,7 +235,7 @@ int main()
         else if (fct.type == Executable)
         {
             string command_with_full_path = "";
-            for (int argument_number = 0; argument_number < command_vector.size(); argument_number++)
+            for (int argument_number = 0; argument_number < size; argument_number++)
             {
                 command_with_full_path += " ";
                 command_with_full_path += command_vector[argument_number];
@@ -325,16 +326,16 @@ vector<string> parse_command_to_string_vector(string command)
 {
     vector<string> arguments;
     string complete_argument = "";
-
-    for (int i = 0; i < command.length(); i++)
+    int command_length = command.length();
+    for (int i = 0; i < command_length; i++)
     {
         char c = command[i];
         if (c == '\"')
         {
             i++;
-            while (command[i] != '\"' || (i < command.length() - 1 && command[i + 1] == '\"') || (command[i - 1] == '\"'))
+            while (command[i] != '\"' || (i < command_length - 1 && command[i + 1] == '\"') || (command[i - 1] == '\"'))
             {
-                if (command[i] == '\\' && i < command.length() - 1)
+                if (command[i] == '\\' && i < command_length - 1)
                 {
                     if (command[i + 1] == '\\' || command[i + 1] == '\"')
                     {
@@ -354,7 +355,7 @@ vector<string> parse_command_to_string_vector(string command)
         else if (c == '\'')
         {
             i++;
-            while (command[i] != '\'' || (i < command.length() - 1 && command[i + 1] == '\'') || (command[i - 1] == '\''))
+            while (command[i] != '\'' || (i < command_length - 1 && command[i + 1] == '\'') || (command[i - 1] == '\''))
             {
                 if (command[i] != '\'')
                     complete_argument += command[i];
